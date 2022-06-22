@@ -1,0 +1,15 @@
+@font-face {
+	font-family: "dotsfont";
+	src: url("../../../../public/fonts/dotsfont.ttf") format("truetype");
+}
+
+.pinInputField {
+	width: 100%;
+	height: 125px;
+	min-width: 50px;
+	min-height: 50px;
+	text-align: center;
+	font-size: 2rem;
+	font-family: "dotsfont";
+	caret-color: transparent;
+}

@@ -1,0 +1,9 @@
+export const BC_STORE_HASH = process.env.BC_STORE_HASH;
+export const BC_AUTH_TOKEN = process.env.BC_AUTH_TOKEN;
+export const BC_GQL_URL = process.env.BC_GQL_URL;
+export const BC_CHANNEL_ID = process.env.BC_CHANNEL_ID;
+export const BC_BASE_URL = `https://api.bigcommerce.com/stores/${BC_STORE_HASH}`;
+export const BC_PAYMENT_URL = `https://payments.bigcommerce.com/stores/${BC_STORE_HASH}`;
+export const BC_APP_CLIENT_ID = process.env.BC_APP_CLIENT_ID;
+export const BC_APP_SECRET = process.env.BC_APP_SECRET;
+export const BC_APP_CALLBACK_URL = process.env.BC_APP_CALLBACK_URL;

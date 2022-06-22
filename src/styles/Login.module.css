@@ -1,0 +1,24 @@
+.screenHeight {
+	height: 100vh;
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 50vw;
+	min-width: 720px;
+	height: 100%;
+}
+
+.signOutBtn {
+	position: absolute;
+}
+
+.signingInWrapper {
+	min-height: 125px;
+}
+
+.progressCircle > * {
+	margin: 0 2rem;
+}

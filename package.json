@@ -1,0 +1,84 @@
+{
+  "name": "point-of-sale-foundation",
+  "author": "bigcommerce",
+  "license": "MIT",
+  "version": "0.7.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bigcommerce/point-of-sale-foundation"
+  },
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "format": "prettier --write **/*.{js,ts,tsx}",
+    "lint": "eslint . --ext .js,.ts,.tsx --fix",
+    "start": "next start -p $PORT",
+    "seed": "ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seed.ts",
+    "test-all": "yarn lint && yarn type-check && yarn test",
+    "tmp-run": "ts-node check.ts",
+    "type-check": "tsc --pretty --noEmit"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+  "lint-staged": {
+    "*.@(ts|tsx)": [
+      "yarn lint",
+      "yarn format"
+    ]
+  },
+  "dependencies": {
+    "@babel/core": "^7.18.5",
+    "@bigcommerce/big-design": "^0.30.3-alpha.2",
+    "@prisma/client": "^3.15.2",
+    "@stripe/terminal-js": "^0.9.1",
+    "autoprefixer": "^10.4.7",
+    "axios": "^0.25.0",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
+    "dotenv": "^14.3.2",
+    "http-status-codes": "^2.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.3",
+    "next": "12.0.9",
+    "next-connect": "^0.11.1",
+    "next-intl": "^2.7.4",
+    "node-bigcommerce": "^4.1.0",
+    "nookies": "^2.5.2",
+    "react": "17.0.2",
+    "react-country-flag": "^3.0.2",
+    "react-dom": "17.0.2",
+    "reflect-metadata": "^0.1.13",
+    "stripe": "^8.222.0",
+    "ts-error": "^1.0.6",
+    "tsyringe": "^4.7.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.18.2",
+    "@formiz/core": "^1.8.1",
+    "@formiz/validations": "^1.0.0",
+    "@heroicons/react": "^1.0.6",
+    "@types/dotenv": "^8.2.0",
+    "@types/http-status-codes": "^1.2.0",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/node": "17.0.10",
+    "@types/react": "17.0.38",
+    "@types/styled-components": "^5.1.25",
+    "@typescript-eslint/eslint-plugin": "^5.28.0",
+    "@typescript-eslint/parser": "^5.28.0",
+    "babel-plugin-styled-components": "^2.0.7",
+    "babel-plugin-transform-typescript-metadata": "^0.3.2",
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.30.0",
+    "prettier": "^2.7.1",
+    "prisma": "^3.15.2",
+    "react-router-dom": "^6.3.0",
+    "react-select": "^5.3.2",
+    "react-select-country-list": "^2.2.3",
+    "tailwindcss": "^3.1.3",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3"
+  }
+}

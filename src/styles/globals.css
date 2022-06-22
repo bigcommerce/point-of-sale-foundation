@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.decorator-separator {
+  @apply relative after:absolute after:bottom-0 after:left-0 after:right-0 after:content-['ㅤ'] after:bg-gray-200 after:shadow-sm after:mx-4 after:h-px;
+}
+
+.navigation-carrot {
+  @apply relative after:absolute after:left-0 after:content-['>'] after:text-lg after:ml-3;
+}
+
+.ColorPickerVariantButton {
+  @apply relative w-full h-24 overflow-hidden rounded shadow;
+}
+.ColorPickerVariantButton.active {
+  @apply shadow outline outline-2 outline-offset-4 outline-slate-400;
+}
+.ColorPickerVariantButton > img {
+  @apply w-24 h-24;
+}
+
+.ColorPickerVariantButton > div:last-child {
+  @apply absolute top-10 left-10 w-32 h-32 rotate-45;
+}
+
+.ColorPickerVariantButton > div:nth-child(2) {
+  @apply absolute top-4 left-4 w-36 h-36 rotate-45;
+}
+
+.ColorPickerVariantButton > div:first-child {
+  @apply absolute top-0 left-0 w-32 h-32 rotate-0;
+}
+
+/* Form: Select */
+.form-select__control {
+  @apply text-base font-normal text-gray-700 bg-white 
+    bg-clip-padding border border-solid border-gray-300
+    rounded transition ease-in-out m-0;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+}
+
+/* Product Page Tabs */
+.Tabs .TabContent > div:first-child:not(.order-customer-section) {
+  height: calc(100vh - 310px);
+  @apply overflow-y-scroll;
+}
+
+.Tabs .TabContent > .order-customer-section {
+  height: calc(100vh - 122px);
+  @apply overflow-y-scroll;
+}
+
+.screen-container {
+  height: calc(100vh - 3.5rem);
+}

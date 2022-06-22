@@ -1,0 +1,32 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["mongoDb"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  Employee Employee[]
+}
+
+model Employee {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  pin       Int       @unique
+  firstName String
+  lastName  String
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+  role      Role      @relation(references: [id], fields: [roleId])
+  roleId    String    @db.ObjectId
+}
+
+model Settings { 
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  value     String
+}
