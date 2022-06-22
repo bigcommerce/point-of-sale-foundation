@@ -14,7 +14,7 @@ const OrderCustomer = () => {
       </div>
       <div
         onClick={() => {
-          actions.openCustomerTab();
+          actions.openCustomerTab("update");
         }}
         className="flex justify-center items-center w-20 h-full p-7 shadow"
       >

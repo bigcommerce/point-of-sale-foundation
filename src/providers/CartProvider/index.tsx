@@ -38,7 +38,13 @@ import {
   UpdateCustomerAction,
   RemoveCustomerAction,
   ConsignmentRequest,
-  ConsignmentLineItem
+  ConsignmentLineItem,
+  AddOrderNotesFunction,
+  UpdateOrderNotesFunction,
+  RemoveOrderNotesFunction,
+  OpenOrderNotesTabFunction,
+  AddUpdateOrderNotesToOrderAction,
+  RemoveOrderNotesFromOrderAction
 } from "./context";
 import {
   getCartMethod,
@@ -64,7 +70,9 @@ import {
   capturePaymentIntentMethod,
   getCustomersMethod,
   createCustomerMethod,
-  updateCustomerMethod
+  updateCustomerMethod,
+  addUpdateOrderNotesToOrderMethod,
+  removeOrderNotesFromOrderMethod
 } from "./methods";
 import { StoreAddress } from "../SettingsProvider";
 import { asyncForEach } from "@/shared/utils/asyncForEach";
@@ -109,6 +117,8 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
   const [getCustomersLoader, setGetCustomersLoader] = useState(false);
   const [updateCustomerLoader, setUpdateCustomerLoader] = useState(false);
   const [removeCustomerLoader, setRemoveCustomerLoader] = useState(false);
+  const [addUpdateOrderNotesToOrderLoader, setAddUpdateOrderNotesToOrderLoader] = useState(false);
+  const [removeOrderNotesFromOrderLoader, setRemoveOrderNotesFromOrderLoader] = useState(false);
 
   // Errors
   const [getCartError, setGetCartError] = useState(null);
@@ -137,6 +147,8 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
   const [getCustomersError, setGetCustomersError] = useState(null);
   const [updateCustomerError, setUpdateCustomerError] = useState(null);
   const [removeCustomerError, setRemoveCustomerError] = useState(null);
+  const [addUpdateOrderNotesToOrderError, setAddUpdateOrderNotesToOrderError] = useState(null);
+  const [removeOrderNotesFromOrderError, setRemoveOrderNotesFromOrderError] = useState(null);
 
   const [cart, setCart] = useState(null);
   const [checkout, setCheckout] = useState(null);
@@ -149,25 +161,24 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
   const [reader, setReader] = useState(null);
   const [terminal, setTerminal] = useState(null);
   const [customer, setCustomer] = useState(null);
+  const [orderNotes, setOrderNotes] = useState(null);
   const [customersLookupResult, setCustomerLookupResult] = useState(null);
 
   useEffect(() => {
     const posCart =
       typeof window !== "undefined" ? JSON.parse(localStorage.getItem("pos_cart")) : null;
-
     const posCheckout =
       typeof window !== "undefined" ? JSON.parse(localStorage.getItem("pos_checkout")) : null;
-
     const posOrderId =
       typeof window !== "undefined" ? parseInt(localStorage.getItem("pos_order_id")) : 0;
-
     const posAcceptedPaymentMethods =
       typeof window !== "undefined"
         ? JSON.parse(localStorage.getItem("pos_accepted_payment_methods"))
         : null;
-
     const posCustomer =
       typeof window !== "undefined" ? JSON.parse(localStorage.getItem("pos_customer")) : null;
+    const posOrderNotes =
+      typeof window !== "undefined" ? localStorage.getItem("pos_order_notes") : null;
 
     if (!isNullOrUndefined(posCart) && isNullOrUndefined(cart)) {
       setCart(posCart);
@@ -186,6 +197,9 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
     }
     if (!isNullOrUndefined(posCustomer) && isNullOrUndefined(customer)) {
       setCustomer(posCustomer);
+    }
+    if (!isNullOrUndefined(posOrderNotes) && isNullOrUndefined(orderNotes)) {
+      setOrderNotes(posOrderNotes);
     }
 
     // Get terminal locations
@@ -233,7 +247,7 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
     })();
   }, [orderId]);
 
-  // store accepted payment methods in localStorage
+  // Store accepted payment methods in localStorage
   useEffect(() => {
     (async function () {
       if (!isNullOrUndefined(acceptedPaymentMethods) && typeof window !== "undefined") {
@@ -245,7 +259,7 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
     })();
   }, [acceptedPaymentMethods]);
 
-  // store customer in localStorage
+  // Store customer in localStorage
   useEffect(() => {
     (async function () {
       if (!isNullOrUndefined(customer) && typeof window !== "undefined") {
@@ -254,6 +268,15 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
       }
     })();
   }, [customer]);
+
+  // Store order notes in localStorage
+  useEffect(() => {
+    (async function () {
+      if (!isNullOrUndefined(orderNotes) && typeof window !== "undefined") {
+        localStorage.setItem("pos_order_notes", orderNotes);
+      }
+    })();
+  }, [orderNotes]);
 
   const actionBuilder = ({ setLoader, setData, setError, execMethod }) =>
     function (...args) {
@@ -326,6 +349,7 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
       localStorage.removeItem("pos_checkout");
       localStorage.removeItem("pos_order_id");
       localStorage.removeItem("pos_customer");
+      localStorage.removeItem("pos_order_notes");
     }
   };
 
@@ -474,11 +498,18 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
         postal_code: storeAddress.postal_code,
         country_code: storeAddress.country_code
       };
-
       await addBillingAddress(cart.id, addBillingAddressRequest);
 
       // Create initial order
       const orderId = await createOrder(cart.id);
+
+      // Update order with order notes if exist
+      if (orderNotes && "number" === typeof orderId) {
+        console.log("addUpdateOrderNotesToOrder :: orderId :: ", orderId);
+        console.log("addUpdateOrderNotesToOrder :: orderNotes :: ", orderNotes);
+        await addUpdateOrderNotesToOrder(orderId, orderNotes);
+      }
+
       return orderId;
     }
     return 0;
@@ -532,10 +563,10 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
     });
 
     if (terminal.paymentStatus === "not_ready") {
-      setCollectTerminalPaymentError('Terminal is not ready to accept payments.');
-      console.log('Terminal is in "not_ready" status.')
+      setCollectTerminalPaymentError("Terminal is not ready to accept payments.");
+      console.log('Terminal is in "not_ready" status.');
       setCollectTerminalPaymentLoader(false);
-      return
+      return;
     }
 
     const stripePaymentClientSecret = createPaymentIntentResult.client_secret;
@@ -574,7 +605,7 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
   const stopCollectingTerminalPayment = async () => {
     terminal.cancelCollectPaymentMethod();
     setCollectTerminalPaymentLoader(false);
-  }
+  };
 
   const clearLocations: ClearLocationsAction = async () => {
     setLocations([]);
@@ -609,8 +640,9 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
     execMethod: createCustomerMethod
   });
 
-  const openCustomerTab: OpenCustomerTabFunction = () => {
-    router.push("register?tab=add-customer&action=update");
+  const openCustomerTab: OpenCustomerTabFunction = (action = "") => {
+    const actionUrl = "update" == action ? "&action=update" : null;
+    router.push(`register?tab=add-customer${actionUrl}`);
   };
 
   const getCustomers: GetCustomersAction = actionBuilder({
@@ -627,13 +659,13 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
     execMethod: updateCustomerMethod
   });
 
-  const setActiveCustomer = (customer) => {
-    setCustomer(customer)
-  }
+  const setActiveCustomer = customer => {
+    setCustomer(customer);
+  };
 
   const clearCustomersLookupResult = () => {
-    setCustomerLookupResult(null)
-  }
+    setCustomerLookupResult(null);
+  };
 
   const removeCustomer: RemoveCustomerAction = async () => {
     // Update cart customer ID to zero
@@ -644,6 +676,43 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
     setCustomer(null);
     // Remove from local storage
     localStorage.removeItem("pos_customer");
+  };
+
+  const addOrderNotes: AddOrderNotesFunction = orderNotesParam => {
+    setOrderNotes(orderNotesParam);
+    return orderNotes;
+  };
+
+  const updateOrderNotes: UpdateOrderNotesFunction = orderNotesParam => {
+    setOrderNotes(orderNotesParam);
+    return orderNotes;
+  };
+
+  const openOrderNotesTab: OpenOrderNotesTabFunction = action => {
+    const actionUrl = "update" == action ? "&action=update" : null;
+    router.push(`register?tab=order-notes${actionUrl}`);
+  };
+
+  const addUpdateOrderNotesToOrder: AddUpdateOrderNotesToOrderAction = actionBuilder({
+    setLoader: setAddUpdateOrderNotesToOrderLoader,
+    setData: () => {},
+    setError: setAddUpdateOrderNotesToOrderError,
+    execMethod: addUpdateOrderNotesToOrderMethod
+  });
+
+  const removeOrderNotesFromOrder: RemoveOrderNotesFromOrderAction = actionBuilder({
+    setLoader: setRemoveOrderNotesFromOrderLoader,
+    setData: () => {},
+    setError: setRemoveOrderNotesFromOrderError,
+    execMethod: removeOrderNotesFromOrderMethod
+  });
+
+  const removeOrderNotes: RemoveOrderNotesFunction = async () => {
+    if (orderId) {
+      await removeOrderNotesFromOrder(orderId);
+    }
+    setOrderNotes(null);
+    localStorage.removeItem("pos_order_notes");
   };
 
   const value = {
@@ -674,7 +743,9 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
         createCustomer: createCustomerLoader,
         getCustomers: getCustomersLoader,
         updateCustomer: updateCustomerLoader,
-        removeCustomer: removeCustomerLoader
+        removeCustomer: removeCustomerLoader,
+        addUpdateOrderNotesToOrder: addUpdateOrderNotesToOrderLoader,
+        removeOrderNotesFromOrder: removeOrderNotesFromOrderLoader
       },
       errors: {
         getCart: getCartError,
@@ -702,7 +773,9 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
         createCustomer: createCustomerError,
         getCustomers: getCustomersError,
         updateCustomer: updateCustomerError,
-        removeCustomer: removeCustomerError
+        removeCustomer: removeCustomerError,
+        addUpdateOrderNotesToOrder: addUpdateOrderNotesToOrderError,
+        removeOrderNotesFromOrder: removeOrderNotesFromOrderError
       },
       cart,
       checkout,
@@ -714,6 +787,7 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
       readers,
       reader,
       customer,
+      orderNotes,
       customersLookupResult
     },
     actions: {
@@ -752,7 +826,13 @@ const CartProvider = (props: { access_token: string; children: React.ReactElemen
       clearCustomersLookupResult,
       updateCustomer,
       removeCustomer,
-      openCustomerTab
+      openCustomerTab,
+      addOrderNotes,
+      updateOrderNotes,
+      removeOrderNotes,
+      openOrderNotesTab,
+      addUpdateOrderNotesToOrder,
+      removeOrderNotesFromOrder
     }
   };
 
