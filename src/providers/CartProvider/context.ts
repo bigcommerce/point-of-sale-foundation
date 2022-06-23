@@ -7,6 +7,7 @@ import {
   PaymentMethodResponse,
   ProcessPaymentRequest
 } from "@/types/big-commerce/payment";
+import { OrderResponse } from "@/types/big-commerce/orders";
 import { Reader } from "@stripe/terminal-js";
 
 export type GetCartAction = (cartId: string) => Promise<Cart | ErrorResponse | null>;
@@ -89,7 +90,19 @@ export type SetActiveCustomerAction = (customer: Customer) => void;
 export type ClearCustomersLookupResultAction = () => void;
 export type UpdateCustomerAction = (customer: CustomerRequest) => Promise<Customer | ErrorResponse>;
 export type RemoveCustomerAction = () => void;
-export type OpenCustomerTabFunction = () => void;
+export type OpenCustomerTabFunction = (action: string) => void;
+
+export type AddOrderNotesFunction = (orderNote: string) => string;
+export type UpdateOrderNotesFunction = (orderNote: string) => string;
+export type RemoveOrderNotesFunction = () => void;
+export type OpenOrderNotesTabFunction = (action: string) => void;
+export type AddUpdateOrderNotesToOrderAction = (
+  orderId: number,
+  orderNote: string
+) => Promise<OrderResponse | ErrorResponse>;
+export type RemoveOrderNotesFromOrderAction = (
+  orderId: number
+) => Promise<OrderResponse | ErrorResponse>;
 
 export interface CustomerRequest {
   email: string;
@@ -509,6 +522,7 @@ export type CartLoadingStates = {
   getCustomers: boolean;
   updateCustomer: boolean;
   removeCustomer: boolean;
+  addUpdateOrderNotesToOrder: boolean;
 };
 
 export type CartErrorStates = {
@@ -536,6 +550,7 @@ export type CartErrorStates = {
   createCustomer: ErrorResponse | Error | null;
   updateCustomer: ErrorResponse | Error | null;
   removeCustomer: ErrorResponse | Error | null;
+  addUpdateOrderNotesToOrder: ErrorResponse | Error | null;
 };
 
 export type CartState = {
@@ -551,6 +566,7 @@ export type CartState = {
   readers: Reader[];
   reader: Reader;
   customer: Customer;
+  orderNotes: string;
   customersLookupResult: any;
 };
 
@@ -585,10 +601,15 @@ export type CartActions = {
   createCustomer: CreateCustomerAction;
   getCustomers: GetCustomersAction;
   setActiveCustomer: SetActiveCustomerAction;
-  clearCustomersLookupResult: ClearCustomersLookupResultAction; 
+  clearCustomersLookupResult: ClearCustomersLookupResultAction;
   updateCustomer: UpdateCustomerAction;
   removeCustomer: RemoveCustomerAction;
   openCustomerTab: OpenCustomerTabFunction;
+  addOrderNotes: AddOrderNotesFunction;
+  updateOrderNotes: UpdateOrderNotesFunction;
+  removeOrderNotes: RemoveOrderNotesFunction;
+  openOrderNotesTab: OpenCustomerTabFunction;
+  addUpdateOrderNotesToOrder: AddUpdateOrderNotesToOrderAction;
 };
 
 export type CartContextProps = {
@@ -624,7 +645,8 @@ export const CartContext = createContext<CartContextProps>({
       createCustomer: false,
       getCustomers: false,
       updateCustomer: false,
-      removeCustomer: false
+      removeCustomer: false,
+      addUpdateOrderNotesToOrder: false
     },
     errors: {
       getCart: null,
@@ -650,7 +672,8 @@ export const CartContext = createContext<CartContextProps>({
       captureTerminalPayment: null,
       createCustomer: null,
       updateCustomer: null,
-      removeCustomer: null
+      removeCustomer: null,
+      addUpdateOrderNotesToOrder: null
     },
     cart: null,
     checkout: null,
@@ -662,6 +685,7 @@ export const CartContext = createContext<CartContextProps>({
     readers: [],
     reader: null,
     customer: null,
+    orderNotes: null,
     customersLookupResult: null
   },
   actions: {
@@ -694,11 +718,16 @@ export const CartContext = createContext<CartContextProps>({
     clearErrors: () => Promise.resolve(null),
     createCustomer: customer => Promise.resolve(null),
     getCustomers: nameSearchValue => Promise.resolve(null),
-    setActiveCustomer: (customer) => {},
+    setActiveCustomer: customer => {},
     clearCustomersLookupResult: () => {},
     updateCustomer: customer => Promise.resolve(null),
     removeCustomer: () => Promise.resolve(null),
-    openCustomerTab: () => {}
+    openCustomerTab: () => {},
+    addOrderNotes: orderNote => null,
+    updateOrderNotes: orderNote => null,
+    removeOrderNotes: () => {},
+    openOrderNotesTab: () => {},
+    addUpdateOrderNotesToOrder: (orderId, orderNotes) => Promise.resolve(null)
   }
 });
 

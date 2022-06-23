@@ -27,6 +27,7 @@ import {
 } from "@/shared/types/big-commerce/payment";
 import { ProcessCashPaymentRequest } from "@/shared/types/requests";
 import { ErrorResponse, CompletedPaymentResponse } from "@/shared/types/response";
+import type { OrderResponse } from "@/types/big-commerce/orders";
 
 const apiUri = "/api";
 
@@ -156,6 +157,22 @@ export type UpdateCustomerFunction = (
 ) => Promise<Customer | ErrorResponse>;
 
 export type RemoveCustomerFunction = () => void;
+
+export type AddOrderNotesFunction = (orderNotes: string, options: MethodOptions) => Promise<string>;
+export type UpdateOrderNotesFunction = (
+  orderNotes: string,
+  options: MethodOptions
+) => Promise<string>;
+export type RemoveOrderNotesFunction = (orderNotes: string, options: MethodOptions) => void;
+export type AddUpdateOrderNotesToOrderFunction = (
+  orderId: number,
+  orderNotes: string,
+  options: MethodOptions
+) => Promise<OrderResponse | ErrorResponse>;
+export type RemoveOrderNotesFromOrderFunction = (
+  orderId: number,
+  options: MethodOptions
+) => Promise<OrderResponse | ErrorResponse>;
 
 const handleResponse = response => {
   if (!response.ok) {
@@ -720,5 +737,42 @@ export const updateCustomerMethod: UpdateCustomerFunction = (customer, { access_
   }).then(async response => {
     const res = await handleResponse(response);
     return res as Promise<Customer | ErrorResponse>;
+  });
+};
+
+export const addUpdateOrderNotesToOrderMethod: AddUpdateOrderNotesToOrderFunction = (
+  orderId,
+  orderNotes,
+  { access_token }
+) => {
+  const url = `${apiUri}/orders/${orderId}`;
+  return fetch(url, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ staff_notes: orderNotes })
+  }).then(async response => {
+    const res = await handleResponse(response);
+    return res as Promise<OrderResponse | ErrorResponse>;
+  });
+};
+
+export const removeOrderNotesFromOrderMethod: RemoveOrderNotesFromOrderFunction = (
+  orderId,
+  { access_token }
+) => {
+  const url = `${apiUri}/orders/${orderId}`;
+  return fetch(url, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ staff_notes: "" })
+  }).then(async response => {
+    const res = await handleResponse(response);
+    return res as Promise<OrderResponse | ErrorResponse>;
   });
 };

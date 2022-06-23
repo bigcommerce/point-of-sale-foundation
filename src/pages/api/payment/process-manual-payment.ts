@@ -20,10 +20,17 @@ class CheckoutManualPaymentController extends ApiRouteController {
    */
   public async run(_req?: NextApiRequest, res?: NextApiResponse): Promise<NextApiResponse | void> {
     const { orderId, payment, paymentAccessToken } = _req.body;
+
+    console.log("process manual payment :: orderId :: ", orderId);
+    console.log("process manual payment :: payment :: ", payment);
+    console.log("process manual payment :: paymentAccessToken :: ", paymentAccessToken);
+
     const manualPayment = await this.bigService.paymentAPI.processManualPayment(
       payment,
       paymentAccessToken
     );
+
+    console.log("process manual payment :: manualPayment :: ", manualPayment);
 
     let paymentResponse: CompletedPaymentResponse | ErrorResponse;
     if ("status" in manualPayment && manualPayment.status === "success") {
