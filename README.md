@@ -1,6 +1,6 @@
-# BigCommerce Point of Sale (POS) Foundation
+# BigCommerce Point of Sale Foundation
 
-🚀 This open-sourced POS application allows you to build custom in-store apps using the BigCommerce platform.
+🚀 This open-sourced POS showcases how custom in-store apps could be built using the BigCommerce platform.
 
 💰 **Pre-integrated into Stripe Terminal**, including connection to multiple terminals at a single location.
 
@@ -59,9 +59,9 @@ This app works with MongoDB. The `provider` setting in the `/prisma/schema.prism
 
 ![POS-provider-mongodb](https://storage.googleapis.com/bigcommerce-production-dev-center/images/POS-provider-mongodb.png)
 
-We highly recommend using MongoDB, but if you would like to use another type of database, you will need to update the configuration to work with the database of your choice. View the available database options here: https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-schema/data-sources/)
+We highly recommend using MongoDB, but if you would like to use another type of database, you will need to update the configuration to work with the database of your choice. View the available database options here: https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-schema/data-sources/
 
-Copy the the `DATABASE_URL` generated from Mongo Cloud ( https://cloud.mongodb.com). In a later step, you will need the `DATABASE_URL` to update the environment variable in .env file. 
+Mongo Cloud (https://cloud.mongodb.com) generates the `DATABASE_URL` as shown in the setup instructions below. In a later step, you will need the `DATABASE_URL` to update the environment variable in .env file. 
 
 Click on the arrow below and follow the Mongo Cloud setup instructions.
 
@@ -114,7 +114,7 @@ cp .env.sample .env
 At a minimum, the following .env variables need to be updated for the app to sucessfully run.
 
 - `DATABASE_URL`
-  - Follow the [Set up Database](#set-up-database) step to get this.
+  - Follow the [Set up Database](#set-up-database) instructions to get this.
 - `BC_STORE_HASH`, `BC_AUTH_TOKEN`, `BC_CHANNEL_ID`, `BC_GQL_URL, `BC_APP_CLIENT_ID`, and `BC_APP_SECRET`
   - Follow the [BigCommerce setup](#bigcommerce-setup) instructions to get these.
 - `STRIPE_SECRET_KEY`
@@ -147,7 +147,7 @@ At a minimum, the following .env variables need to be updated for the app to suc
 
   _Note: You can also use Mongo Compass as your database GUI. Download and install to connect: [Mongo Compass](https://www.mongodb.com/products/compass)_
 
-4. Run App
+4. Run app
 
 ```bash
 npm run dev
