@@ -19,7 +19,7 @@ You will need the following:
 
 ## Getting started
 
-Head to the [POS Foundation](/api-docs/partner/pos-solutions/foundation-guide) article to begin!  
+Head to the [POS Foundation](/api-docs/partner/pos-solutions/foundation-guide) guide to begin!  
 
 
 ## Key areas of codebase
