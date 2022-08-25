@@ -1,6 +1,6 @@
 # BigCommerce Point of Sale Foundation
 
-🚀 This open source proof-of-concept app scaffold showcases the BigCommerce platform's customizable ability to support point-of-sale transactions.
+🚀 This open source proof-of-concept app showcases the BigCommerce platform's customizable ability to support point-of-sale transactions.
 
 💰 **Integrated with Stripe Terminal**. Power multiple registers at a single location.
 
