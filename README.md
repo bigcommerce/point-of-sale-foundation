@@ -51,7 +51,7 @@ Find prerequisites, configuration details, and more in the [POS Foundation Guide
             ├── context.ts 
                 # The types available to this provider's page and its child components.
             └── methods.ts
-                # Functions that this provider's actions call to fetch and modify data
+                # The functions called by the provider's actions to fetch / modify data.
 
 ```
 
