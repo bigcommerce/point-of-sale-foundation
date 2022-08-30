@@ -106,6 +106,6 @@ Looking to help the world's leading brands and the next generation of successful
 * [Multi-Storefront Overview](https://support.bigcommerce.com/s/article/Multi-Storefront)
 * [Subscription Foundation README](https://github.com/bigcommerce/subscription-foundation/blob/main/README.md)
 * [Subscription Foundation Overview](https://developer.bigcommerce.com/api-docs/partner/subscription-solutions/foundation-guide)
-* [Channels API Reference](/api-reference/store-management/channels/channels/createchannel)
+* [Channels API Reference](https://developer.bigcommerce.com/api-reference/store-management/channels/channels/createchannel)
 * [App API Accounts](/api-docs/getting-started/authentication/rest-api-authentication#app-api-accounts)
 * [Guide to Building Apps](/api-docs/apps/guide/intro)
