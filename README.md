@@ -108,4 +108,4 @@ Looking to help the world's leading brands and the next generation of successful
 * [Subscription Foundation Overview](https://developer.bigcommerce.com/api-docs/partner/subscription-solutions/foundation-guide)
 * [Channels API Reference](https://developer.bigcommerce.com/api-reference/store-management/channels/channels/createchannel)
 * [App API Accounts](/api-docs/getting-started/authentication/rest-api-authentication#app-api-accounts)
-* [Guide to Building Apps](/api-docs/apps/guide/intro)
+* [Guide to Building Apps](https://developer.bigcommerce.com/api-docs/apps/guide/intro)
