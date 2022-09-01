@@ -101,3 +101,11 @@ Looking to help the world's leading brands and the next generation of successful
 - [BigCommerce Dev Center](https://developer.bigcommerce.com/?source=pos-foundation) - Learn more about BigCommerce platform features, APIs and SDKs
 - [BigDesign](https://developer.bigcommerce.com/big-design/?source=pos-foundation) - BigCommerce's library of React components with sandbox tools
 - [Building BigCommerce Apps](https://developer.bigcommerce.com/api-docs/apps/guide/intro?source=pos-foundation) - Learn more about apps, from lightweight single-merchant customizations to fully-featured apps you can sell in the BigCommerce App Marketplace
+
+### Expansion resources
+* [Multi-Storefront Overview](https://support.bigcommerce.com/s/article/Multi-Storefront)
+* [Subscription Foundation README](https://github.com/bigcommerce/subscription-foundation/blob/main/README.md)
+* [Subscription Foundation Overview](https://developer.bigcommerce.com/api-docs/partner/subscription-solutions/foundation-guide)
+* [Channels API Reference](https://developer.bigcommerce.com/api-reference/store-management/channels/channels/createchannel)
+* [App API Accounts](https://developer.bigcommerce.com/api-docs/getting-started/authentication/rest-api-authentication#app-api-accounts)
+* [Guide to Building Apps](https://developer.bigcommerce.com/api-docs/apps/guide/intro)
